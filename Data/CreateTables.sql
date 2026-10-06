@@ -9,14 +9,34 @@ ALTER ROLE db_owner
 ADD MEMBER [NandaSurendra];
 */
 
-if object_id('Stadium') is not null
-    drop table Stadium;
-if object_id('Team') is not null
-    drop table Team;
+if object_id('PunterStats')   
+is not null drop table PunterStats;
+if object_id('KickerStats')   
+is not null drop table KickerStats;
+if object_id('ReturnerStats') 
+is not null drop table ReturnerStats;
+if object_id('DefenderStats') 
+is not null drop table DefenderStats;
+if object_id('RBStats') 
+is not null drop table RBStats;
+if object_id('QBStats') 
+is not null drop table QBStats;
+if object_id('PlayerStats') 
+is not null drop table PlayerStats;
+if object_id('Roster') 
+is not null drop table Roster;
+if object_id('Player') 
+is not null drop table Player;
+if object_id('Position') is not null 
+drop table Position;
 if object_id('Game') is not null
     drop table Game;
+if object_id('Team') is not null
+    drop table Team;
+if object_id('Stadium') is not null
+    drop table Stadium;
 
-go
+go 
 
 
 CREATE table STADIUM (
