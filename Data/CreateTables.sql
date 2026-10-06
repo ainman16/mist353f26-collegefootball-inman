@@ -65,3 +65,118 @@ CREATE table Game (
     constraint FK_Game_Stadium FOREIGN KEY (StadiumID) REFERENCES STADIUM(StadiumID)
 );
 
+CREATE table Position (
+    PositionID INT NOT NULL IDENTITY(1,1),
+    PositionName VARCHAR(50) NOT NULL,
+    constraint PK_Position PRIMARY KEY (PositionID),
+    constraint UQ_PositionName UNIQUE (PositionName)
+);
+
+CREATE table Player (
+    PlayerID INT NOT NULL IDENTITY(1,1),
+    PlayerName VARCHAR(50) NOT NULL,
+    PlayerDateOfBirth DATE NOT NULL,
+    PositionID INT NOT NULL,
+    constraint PK_Player PRIMARY KEY (PlayerID),
+    constraint UQ_PlayerName UNIQUE (PlayerName, PlayerDateOfBirth),
+    constraint FK_Player_Position FOREIGN KEY (PositionID) REFERENCES Position(PositionID)
+);
+
+CREATE table Roster (
+    RosterID INT NOT NULL IDENTITY(1,1),
+    PlayerID INT NOT NULL,
+    TeamID INT NOT NULL,
+    SeasonWins INT NOT NULL,
+    SeasonLosses INT NOT NULL,
+    SeasonTies INT NOT NULL,
+    YearNumber INT NOT NULL,
+    Position VARCHAR(50) NOT NULL,
+    constraint PK_Roster PRIMARY KEY (RosterID),
+    constraint UQ_Roster UNIQUE (PlayerID, YearNumber),
+    constraint FK_Roster_Player FOREIGN KEY (PlayerID) REFERENCES Player(PlayerID),
+    constraint FK_Roster_Team FOREIGN KEY (TeamID) REFERENCES Team(TeamID)
+);
+
+CREATE table PlayerStats (
+    PlayerStatsID INT NOT NULL IDENTITY(1,1),
+    Position VARCHAR(50) NOT NULL,
+    PlayerID INT NOT NULL,
+    RosterID INT NOT NULL,
+    constraint PK_PlayerStats PRIMARY KEY (PlayerStatsID),
+    constraint FK_PlayerStats_Player FOREIGN KEY (PlayerID) REFERENCES Player(PlayerID),
+    constraint FK_PlayerStats_Roster FOREIGN KEY (RosterID) REFERENCES Roster(RosterID),
+);
+
+CREATE table QBStats (
+    QBStatsID INT NOT NULL IDENTITY(1,1),
+    PlayerStatsID INT NOT NULL,
+    Attempts INT NOT NULL,
+    Completions INT NOT NULL,
+    Yards INT NOT NULL,
+    TDs INT NOT NULL,
+    INTs INT NOT NULL,
+constraint PK_QBStats PRIMARY KEY (QBStatsID),
+    constraint FK_QBStats_PlayerStats FOREIGN KEY (PlayerStatsID) REFERENCES PlayerStats(PlayerStatsID),
+);
+
+CREATE table RBStats (
+    RBStatsID INT NOT NULL IDENTITY(1,1),
+    PlayerStatsID INT NOT NULL,
+    Carries INT NOT NULL,
+    Yards INT NOT NULL,
+    TDs INT NOT NULL,
+    Long INT NOT NULL,
+    Fumbles INT NOT NULL,
+    constraint PK_RBStats PRIMARY KEY (RBStatsID),
+    constraint FK_RBStats_PlayerStats FOREIGN KEY (PlayerStatsID) REFERENCES PlayerStats(PlayerStatsID),
+);
+
+CREATE table DefenderStats (
+    DefenderStatsID INT NOT NULL IDENTITY(1,1),
+    PlayerStatsID INT NOT NULL,
+    Tackles INT NOT NULL,
+    Sacks INT NOT NULL,
+    Interceptions INT NOT NULL,
+    DefensiveTDs INT NOT NULL,
+    constraint PK_DefenderStats PRIMARY KEY (DefenderStatsID),
+    constraint FK_DefenderStats_PlayerStats FOREIGN KEY (PlayerStatsID) REFERENCES PlayerStats(PlayerStatsID),
+);
+
+CREATE table ReturnerStats (
+    ReturnerStatsID INT NOT NULL IDENTITY(1,1),
+    PlayerStatsID INT NOT NULL,
+    KickOffAttempts INT NOT NULL,
+    KickOffYards INT NOT NULL,
+    KickOffLong INT NOT NULL,
+    KickOffTDs INT NOT NULL,
+    PuntReturnAttempts INT NOT NULL,
+    PuntReturnYards INT NOT NULL,
+    PuntReturnLong INT NOT NULL,
+    PuntReturnTDs INT NOT NULL,
+    constraint PK_ReturnerStats PRIMARY KEY (ReturnerStatsID),
+    constraint FK_ReturnerStats_PlayerStats FOREIGN KEY (PlayerStatsID) REFERENCES PlayerStats(PlayerStatsID),
+);
+
+CREATE table KickerStats (
+    KickerStatsID INT NOT NULL IDENTITY(1,1),
+    PlayerStatsID INT NOT NULL,
+    FieldGoalAttempts INT NOT NULL,
+    FieldGoalsMade INT NOT NULL,
+    Long INT NOT NULL,
+    ExtraPointAttempts INT NOT NULL,
+    ExtraPointsMade INT NOT NULL,
+    constraint PK_KickerStats PRIMARY KEY (KickerStatsID),
+    constraint FK_KickerStats_PlayerStats FOREIGN KEY (PlayerStatsID) REFERENCES PlayerStats(PlayerStatsID),
+);
+
+CREATE table PunterStats (
+    PunterStatsID INT NOT NULL IDENTITY(1,1),
+    PlayerStatsID INT NOT NULL,
+    Punts INT NOT NULL,
+    Yards INT NOT NULL,
+    Long INT NOT NULL,
+    constraint PK_PunterStats PRIMARY KEY (PunterStatsID),
+    constraint FK_PunterStats_PlayerStats FOREIGN KEY (PlayerStatsID) REFERENCES PlayerStats(PlayerStatsID),
+);
+
+
