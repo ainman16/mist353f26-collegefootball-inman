@@ -10,6 +10,9 @@ ADD MEMBER [NandaSurendra];
 */
 
 
+
+if object_id('CoachRoster') is not null
+drop table CoachRoster;
 if object_id('WeeklyPredictionResults') is not null
     drop table WeeklyPredictionResults;
     if object_id('GamePrediction') is not null
@@ -37,9 +40,7 @@ is not null drop table PlayerPosition;
 if object_id('Player')
 is not null drop table  Player;
 if object_id('Position') is not null 
-drop table Position;
-if object_id('TeamCoach') is not null
-    drop table TeamCoach;    
+drop table Position;    
 if object_id('Coach')
 is not null drop table Coach; 
 if object_id('Game') is not null
@@ -104,14 +105,15 @@ CREATE table Coach(
 go
 
 
-CREATE table TeamCoach (
-    TeamCoachID INT NOT NULL IDENTITY(1,1),
+CREATE table CoachRoster (
+    CoachRosterID INT NOT NULL IDENTITY(1,1),
     TeamID INT NOT NULL,
     CoachID INT NOT NULL,
-    constraint PK_TeamCoach PRIMARY KEY (TeamCoachID),
-    constraint UQ_TeamCoach UNIQUE (TeamID, CoachID),
-    constraint FK_TeamCoach_Team FOREIGN KEY (TeamID) REFERENCES Team(TeamID),
-    constraint FK_TeamCoach_Coach FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)
+    YearNumber INT NOT NULL,
+    constraint PK_CoachRoster PRIMARY KEY (CoachRosterID),
+    constraint UQ_CoachRoster UNIQUE (TeamID, CoachID, YearNumber),
+    constraint FK_CoachRoster_Team FOREIGN KEY (TeamID) REFERENCES Team(TeamID),
+    constraint FK_CoachRoster_Coach FOREIGN KEY (CoachID) REFERENCES Coach(CoachID)
 );
 
 go
